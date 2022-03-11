@@ -7,23 +7,31 @@ public class PlayerController : MonoBehaviour
     public float speed = 5f;
     public float xBound = 10f;
     public float zBound = 10f;
+    Gun gun;
     
-    // Start is called before the first frame update
     void Start()
     {
-        
+        gun = GetComponentInChildren<Gun>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        //Move
+        Move();
+        Constrain();
+        if (Input.GetButtonDown("Fire1"))
+            gun.TryShoot();
+    }
+
+    void Move()
+    {
         var h = Input.GetAxisRaw("Horizontal");
         var v = Input.GetAxisRaw("Vertical");
         Vector3 move = new Vector3(h, 0f, v) * Time.deltaTime;
-        transform.Translate(move * speed * Time.deltaTime);
+        transform.Translate(move * speed);
+    }
 
-        //Constrain
+    void Constrain()
+    {
         if (transform.position.x > xBound)
             transform.position = new Vector3(xBound, transform.position.y, transform.position.z);
         if (transform.position.x < -xBound)

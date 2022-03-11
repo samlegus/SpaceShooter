@@ -5,20 +5,18 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public float speed = 10f;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public int damage = 1;
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        transform.Translate(transform.forward * speed * Time.deltaTime);
+        Destroy(gameObject, 10f);
+        GetComponent<Rigidbody>().velocity = transform.forward * speed;
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.TryGetComponent<IDamagable>(out IDamagable hit))
+            hit.TakeDamage(damage);
         Destroy(gameObject);
     }
 }
